@@ -1,0 +1,23 @@
+.result-item {
+    display: flex;
+    align-items: center;
+    width: 60%;
+    margin: 0 auto;
+    justify-content: space-between;
+    padding: 10px 10px;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+
+.result-item > h1 {
+    font-size: 18px;
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding-left: 40px;
+}
+
+.result-item:hover {
+    background-color: #616d84;
+    color: #ffffff;
+}
