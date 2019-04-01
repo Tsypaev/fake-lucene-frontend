@@ -1,0 +1,11 @@
+.controls__form {
+    width: 60%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.controls__form__input {
+    padding: 20px;
+}
