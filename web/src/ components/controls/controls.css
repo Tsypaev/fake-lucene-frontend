@@ -9,3 +9,16 @@
 .controls__form__input {
     padding: 20px;
 }
+
+.controls__switch {
+    position: relative;
+    top: -1px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 30px;
+}
+
+.controls__switch > span {
+    margin-right: 5px;
+}

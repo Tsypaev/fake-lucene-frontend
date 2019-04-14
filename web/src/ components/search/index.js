@@ -11,13 +11,15 @@ export default class SearchContainer extends React.Component {
     this.state = {
       searchQuery: null,
       results: null,
-      type: 'all'
+      type: 'all',
+      isLucene: false
     };
 
     this.setSearchQuery = this.setSearchQuery.bind(this);
     this.search = this.search.bind(this);
     this.onEnterPress = this.onEnterPress.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.toggleIsLucene = this.toggleIsLucene.bind(this);
   }
 
   setSearchQuery(e) {
@@ -25,14 +27,18 @@ export default class SearchContainer extends React.Component {
   }
 
   search() {
-    const { searchQuery, type } = this.state;
+    const { searchQuery, type, isLucene } = this.state;
     if (!searchQuery)
       return;
+    
     const options = {
       crossDomain: true,
       method: 'GET'
     };
-    const url = `${BASE_API_URL}/search?q=${searchQuery}&type=${type}`;
+
+    const route = isLucene ? 'lucene/search' : 'search';
+
+    const url = `${BASE_API_URL}/${route}?q=${searchQuery}&type=${type}`;
 
     fetch(url, options)
       .then(responce => responce.json())
@@ -46,6 +52,12 @@ export default class SearchContainer extends React.Component {
       e.stopPropagation();
       this.search();
     }
+  }
+
+  toggleIsLucene() {
+    this.setState({
+      isLucene: !this.state.isLucene
+    })
   }
 
   onChange(e) {
@@ -63,6 +75,8 @@ export default class SearchContainer extends React.Component {
         <Controls 
           type={this.state.type}
           onChange={this.onChange}
+          isLucene={this.state.isLucene}
+          toggleIsLucene={this.toggleIsLucene}
         />
         <Results results={this.state.results} />
       </div>

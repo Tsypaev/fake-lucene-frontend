@@ -6,7 +6,9 @@
   "dependencies": {
     "express": "4.16.4"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "react-switch": "^4.1.0"
+  },
   "scripts": {
     "start": "node ./server.js"
   },
