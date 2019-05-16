@@ -4,6 +4,10 @@ import Results from "../results";
 import { BASE_API_URL } from "../../const";
 import Controls from "../controls";
 
+const scrappingResponse = {
+
+};
+
 export default class SearchContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -12,7 +16,8 @@ export default class SearchContainer extends React.Component {
       searchQuery: null,
       results: null,
       type: 'all',
-      isLucene: false
+      isLucene: false,
+      scrapping: false
     };
 
     this.setSearchQuery = this.setSearchQuery.bind(this);
@@ -20,6 +25,7 @@ export default class SearchContainer extends React.Component {
     this.onEnterPress = this.onEnterPress.bind(this);
     this.onChange = this.onChange.bind(this);
     this.toggleIsLucene = this.toggleIsLucene.bind(this);
+    this.toggleScrapping = this.toggleScrapping.bind(this);
   }
 
   setSearchQuery(e) {
@@ -27,7 +33,7 @@ export default class SearchContainer extends React.Component {
   }
 
   search() {
-    const { searchQuery, type, isLucene } = this.state;
+    const { searchQuery, type, isLucene, scrapping } = this.state;
     if (!searchQuery)
       return;
     
@@ -36,9 +42,9 @@ export default class SearchContainer extends React.Component {
       method: 'GET'
     };
 
-    const route = isLucene ? 'lucene/search' : 'search';
+    const route = scrapping ? 'getMovie' : isLucene ? 'lucene/search' : 'search';
 
-    const url = `${BASE_API_URL}/${route}?q=${searchQuery}&type=${type}`;
+    const url = `${BASE_API_URL}/${route}?q=${searchQuery}&type=${type}&id=${searchQuery}`;
 
     fetch(url, options)
       .then(responce => responce.json())
@@ -64,9 +70,48 @@ export default class SearchContainer extends React.Component {
     this.setState({type: e.target.value });
   }
 
+  toggleScrapping() {
+    this.setState({
+      scrapping: !this.state.scrapping
+    });
+  }
+
   render() {
-    return (
+    return this.state.scrapping ? 
+    <div>
+      <button onClick={this.toggleScrapping}>
+        Search
+      </button>
+      <Search
+        setSearchQuery={this.setSearchQuery}
+        search={this.search}
+        onEnterPress={this.onEnterPress}
+      />
+      {this.state.results ? (
+        <div className='scrapping-results'>
+          {this.state.results.title ?
+          <p>{this.state.results.title}</p> : null}
+          {this.state.results.year ? 
+            <p>{this.state.results.year}</p> : null}
+          {this.state.results.premierData ? 
+            <p>{this.state.results.premierData}</p> : null}
+          {this.state.results.genresList ?  
+            <p>{this.state.results.genresList}</p> : null}
+          {this.state.results.director ? 
+            <p>{this.state.results.director}</p> : null}
+          {this.state.results.filmStars ?
+            <p>{this.state.results.filmStars}</p> : null}
+          {this.state.results.annotation ? 
+            <p>{this.state.results.annotation}</p> : null}
+          {this.state.results.synopsis ? 
+            <p>{this.state.results.synopsis}</p> : null}
+        </div>
+      ) : null}
+    </div> : (
       <div>
+        <button onClick={this.toggleScrapping}>
+          Scrapping
+        </button>
         <Search 
           setSearchQuery={this.setSearchQuery} 
           search={this.search}
